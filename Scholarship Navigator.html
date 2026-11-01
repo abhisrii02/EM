@@ -1,0 +1,458 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Scholarship Navigator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Hind:wght@400;500;600&display=swap">
+<style>
+  /* Layout concept: an application tracker. The hero shows the five stages a scholarship passes through and marks the four where families get stuck and we step in. */
+  :root {
+    --bg: #F4F6F3;
+    --surface: #FFFFFF;
+    --fg: #13211D;
+    --muted: #57665F;
+    --line: #D3DBD5;
+    --accent: #0B6B5B;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #DDEFE9;
+    --mark: #9A6500;
+    --mark-soft: #FBEFD2;
+    --display: 'Bricolage Grotesque', 'Hind', system-ui, sans-serif;
+    --body: 'Hind', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D1613;
+      --surface: #15221E;
+      --fg: #E8F0EC;
+      --muted: #9BADA5;
+      --line: #2A3B35;
+      --accent: #4FC3A6;
+      --accent-ink: #06211B;
+      --accent-soft: #17342C;
+      --mark: #F0B53A;
+      --mark-soft: #3A2F12;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D1613;
+    --surface: #15221E;
+    --fg: #E8F0EC;
+    --muted: #9BADA5;
+    --line: #2A3B35;
+    --accent: #4FC3A6;
+    --accent-ink: #06211B;
+    --accent-soft: #17342C;
+    --mark: #F0B53A;
+    --mark-soft: #3A2F12;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.15; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  section { padding-block: 56px; }
+  .eyebrow { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 12px; }
+
+  /* Header */
+  header { border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 14px; }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 20px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width: 26px; height: 26px; border-radius: 7px; background: var(--accent); display: grid; place-items: center; }
+  .brand-mark svg { display: block; }
+  .bar-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .nav a { text-decoration: none; color: var(--fg); font-weight: 500; margin-right: 18px; }
+  .nav a:last-child { margin-right: 0; }
+  .nav a:hover { color: var(--accent); }
+  .badge { font-size: 13px; font-weight: 600; background: var(--mark-soft); color: var(--mark); padding: 3px 10px; border-radius: 999px; }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .lang button { font: inherit; font-size: 14px; font-weight: 600; border: 0; background: transparent; color: var(--muted); padding: 5px 12px; cursor: pointer; }
+  .lang button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 48px; align-items: center; padding-block: 56px 64px; }
+  h1 { font-size: clamp(34px, 5.4vw, 56px); letter-spacing: -0.02em; font-weight: 700; }
+  .sub { font-size: 19px; color: var(--muted); margin-top: 18px; max-width: 34em; }
+  .pilot-note { margin-top: 18px; font-size: 15px; color: var(--muted); border-left: 3px solid var(--mark); padding-left: 12px; max-width: 34em; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+  .btn { font: inherit; font-weight: 600; text-decoration: none; padding: 12px 20px; border-radius: 10px; border: 1px solid var(--accent); cursor: pointer; display: inline-block; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { background: transparent; color: var(--accent); }
+
+  .tracker { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px 22px 8px; }
+  .tracker h2 { font-size: 18px; margin-bottom: 14px; }
+  .stages { list-style: none; margin: 0; padding: 0; position: relative; }
+  .stage { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 14px; padding-bottom: 18px; position: relative; }
+  .stage::before { content: ""; position: absolute; left: 10px; top: 22px; bottom: -2px; width: 2px; background: var(--line); }
+  .stage:last-child::before { display: none; }
+  .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); margin-top: 2px; }
+  .stage.ours .dot { border-color: var(--accent); background: var(--accent-soft); }
+  .stage-title { font-weight: 600; line-height: 1.3; }
+  .tag { display: inline-block; font-size: 12.5px; font-weight: 600; margin-top: 4px; padding: 1px 9px; border-radius: 999px; }
+  .tag.ours { background: var(--accent-soft); color: var(--accent); }
+  .tag.other { background: transparent; color: var(--muted); padding-left: 0; font-weight: 400; }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 28px; }
+  .step { border-top: 3px solid var(--accent); padding-top: 14px; }
+  .step .n { font-family: var(--display); font-weight: 700; color: var(--accent); font-size: 15px; }
+  .step h3 { font-size: 21px; margin: 4px 0 8px; }
+  .step p { color: var(--muted); font-size: 16px; }
+  h2.section { font-size: clamp(26px, 3.6vw, 36px); letter-spacing: -0.01em; }
+
+  /* Checklist */
+  .band { background: var(--surface); border-block: 1px solid var(--line); }
+  .docs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+  .lead { color: var(--muted); margin-top: 12px; max-width: 30em; }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .checks label { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; background: var(--bg); }
+  .checks input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+  .checks label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .meter { margin-top: 18px; }
+  .meter-track { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .meter-fill { height: 100%; width: 0; background: var(--accent); transition: width 0.25s ease; }
+  .meter-text { font-weight: 600; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .small { font-size: 14.5px; color: var(--muted); margin-top: 12px; }
+
+  /* Promises */
+  .promises { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 28px; }
+  .promises li { padding: 4px 0 4px 18px; border-left: 3px solid var(--accent); }
+
+  /* Cards */
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+  .card h3 { font-size: 22px; margin-bottom: 8px; }
+  .card p { color: var(--muted); }
+
+  /* FAQ */
+  details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+  summary { font-weight: 600; cursor: pointer; font-size: 18px; }
+  details p { color: var(--muted); margin-top: 8px; max-width: 42em; }
+  .faq { margin-top: 20px; max-width: 760px; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var(--muted); font-size: 14.5px; }
+  footer p { max-width: 46em; }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 36px 44px; }
+    .docs { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    section { padding-block: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .meter-fill { transition: none; } }
+</style>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      Scholarship Navigator
+    </div>
+    <div class="bar-right">
+      <nav class="nav" aria-label="Page sections">
+        <a href="#how" data-i18n="nav-how">How it works</a>
+        <a href="#docs" data-i18n="nav-docs">Document check</a>
+      </nav>
+      <span class="badge" data-i18n="badge">Pilot stage</span>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" id="lang-en" aria-pressed="true">EN</button>
+        <button type="button" id="lang-hi" aria-pressed="false">हिन्दी</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1 data-i18n="h1">Your scholarship, followed all the way to your bank account.</h1>
+      <p class="sub" data-i18n="sub">A local helper checks your documents, helps you apply and chases the payment, in your own language.</p>
+      <p class="pilot-note" data-i18n="pilot">Pilot stage: starting in one district. This is not a government service.</p>
+      <div class="cta">
+        <a class="btn primary" href="#how" data-i18n="cta1">See how it works</a>
+        <a class="btn ghost" href="#docs" data-i18n="cta2">Check your documents</a>
+      </div>
+    </div>
+
+    <aside class="tracker" aria-labelledby="trk-title">
+      <h2 id="trk-title" data-i18n="trk-title">Journey of an application</h2>
+      <ol class="stages">
+        <li class="stage">
+          <span class="dot" aria-hidden="true"></span>
+          <div><div class="stage-title" data-i18n="trk-1">1. Find the scheme</div><span class="tag other" data-i18n="trk-other">Portals and blogs already cover this</span></div>
+        </li>
+        <li class="stage ours">
+          <span class="dot" aria-hidden="true"></span>
+          <div><div class="stage-title" data-i18n="trk-2">2. Collect documents</div><span class="tag ours" data-i18n="trk-help">We help here</span></div>
+        </li>
+        <li class="stage ours">
+          <span class="dot" aria-hidden="true"></span>
+          <div><div class="stage-title" data-i18n="trk-3">3. Apply on the portal</div><span class="tag ours" data-i18n="trk-help2">We help here</span></div>
+        </li>
+        <li class="stage ours">
+          <span class="dot" aria-hidden="true"></span>
+          <div><div class="stage-title" data-i18n="trk-4">4. Institute verifies</div><span class="tag ours" data-i18n="trk-help3">We help here</span></div>
+        </li>
+        <li class="stage ours">
+          <span class="dot" aria-hidden="true"></span>
+          <div><div class="stage-title" data-i18n="trk-5">5. Payment credited</div><span class="tag ours" data-i18n="trk-help4">We help here</span></div>
+        </li>
+      </ol>
+    </aside>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="eyebrow" data-i18n="how-eyebrow">How it works</div>
+      <h2 class="section" data-i18n="how-title">One helper, four steps, until the money arrives.</h2>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3 data-i18n="s1t">Check</h3><p data-i18n="s1d">We confirm which schemes you can apply for and list the documents each one needs.</p></div>
+        <div class="step"><div class="n">2</div><h3 data-i18n="s2t">Prepare</h3><p data-i18n="s2d">We check income proof, the Aadhaar and bank link, and that names match across documents.</p></div>
+        <div class="step"><div class="n">3</div><h3 data-i18n="s3t">Apply</h3><p data-i18n="s3d">We sit with you while you fill the form on the official portal, in your own language.</p></div>
+        <div class="step"><div class="n">4</div><h3 data-i18n="s4t">Follow up</h3><p data-i18n="s4d">We track the status and send WhatsApp updates until the payment is credited.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="band">
+    <section id="docs">
+      <div class="wrap docs">
+        <div>
+          <div class="eyebrow" data-i18n="docs-eyebrow">Document check</div>
+          <h2 class="section" data-i18n="docs-title">Are your documents ready?</h2>
+          <p class="lead" data-i18n="docs-intro">Tick what you already have. Most delays reported by students begin with one of these.</p>
+          <div class="meter" aria-live="polite">
+            <div class="meter-track"><div class="meter-fill" id="fill"></div></div>
+            <div class="meter-text" id="meter-text">0 of 7 ready</div>
+          </div>
+          <p class="small" data-i18n="docs-note">Requirements differ by scheme. Always check the official portal for your scheme.</p>
+        </div>
+        <ul class="checks" id="checks">
+          <li><label for="d1"><input type="checkbox" id="d1"><span data-i18n="d1">Aadhaar number linked to my bank account</span></label></li>
+          <li><label for="d2"><input type="checkbox" id="d2"><span data-i18n="d2">Bank passbook or statement (active account, same name everywhere)</span></label></li>
+          <li><label for="d3"><input type="checkbox" id="d3"><span data-i18n="d3">Recent income certificate</span></label></li>
+          <li><label for="d4"><input type="checkbox" id="d4"><span data-i18n="d4">Caste or category certificate, if the scheme needs one</span></label></li>
+          <li><label for="d5"><input type="checkbox" id="d5"><span data-i18n="d5">Last marksheet or proof of admission</span></label></li>
+          <li><label for="d6"><input type="checkbox" id="d6"><span data-i18n="d6">Passport-size photograph</span></label></li>
+          <li><label for="d7"><input type="checkbox" id="d7"><span data-i18n="d7">Mobile number linked to Aadhaar</span></label></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <section id="promises">
+    <div class="wrap">
+      <div class="eyebrow" data-i18n="prom-eyebrow">Our promises</div>
+      <h2 class="section" data-i18n="prom-title">Rules we work by.</h2>
+      <ul class="promises">
+        <li data-i18n="p1">We never ask for your passwords or OTPs.</li>
+        <li data-i18n="p2">We use your documents only with your written consent.</li>
+        <li data-i18n="p3">We never promise approval. The government or institute decides.</li>
+        <li data-i18n="p4">You pay only if your scholarship is credited. Pilot terms are confirmed before you start.</li>
+        <li data-i18n="p5">We are an independent service, not linked to any government portal.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="band">
+    <section id="price">
+      <div class="wrap">
+        <div class="eyebrow" data-i18n="price-eyebrow">Fees</div>
+        <h2 class="section" data-i18n="price-title">Who pays for what.</h2>
+        <div class="two">
+          <div class="card">
+            <h3 data-i18n="fam-title">For families</h3>
+            <p data-i18n="fam-body">Checking eligibility and documents is free. A small success fee applies only when the scholarship is credited. The amount is agreed with your school or NGO partner before you start.</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="par-title">For schools, colleges and NGOs</h3>
+            <p data-i18n="par-body">We help your students finish their applications, and plan to give you a simple status list for each student. A per-student support fee will be set during the pilot.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="eyebrow" data-i18n="faq-eyebrow">Questions</div>
+      <h2 class="section" data-i18n="faq-title">Before you start.</h2>
+      <div class="faq">
+        <details><summary data-i18n="q1">Is this a government service?</summary><p data-i18n="a1">No. We are an independent pilot. Applications are always submitted on the official portals.</p></details>
+        <details><summary data-i18n="q2">Do you guarantee a scholarship?</summary><p data-i18n="a2">No. Approval is decided by the government or the institute. We help reduce mistakes and follow up.</p></details>
+        <details><summary data-i18n="q3">What if my payment is stuck?</summary><p data-i18n="a3">We check the status and the common causes, such as Aadhaar-bank linking or a name mismatch, then take it up with the institute or the portal.</p></details>
+        <details><summary data-i18n="q4">Do you keep my documents?</summary><p data-i18n="a4">Only with your consent, and they are deleted after your case is closed.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <div class="band">
+    <section id="contact">
+      <div class="wrap">
+        <div class="eyebrow" data-i18n="contact-eyebrow">Contact</div>
+        <h2 class="section" data-i18n="contact-title">Start a conversation.</h2>
+        <p class="lead" data-i18n="contact-body">Our WhatsApp number will appear here when the pilot opens. Until then, check the official portals for your scheme.</p>
+        <p class="small"><span data-i18n="portals">Official portals:</span> <a href="https://scholarships.gov.in" target="_blank" rel="noopener">scholarships.gov.in</a> · <a href="https://www.myscheme.gov.in" target="_blank" rel="noopener">myscheme.gov.in</a></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-i18n="footer">Scholarship Navigator is an independent pilot project and is not affiliated with any government portal. This is a concept website for a course project, 2026.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var T = {
+    en: {
+      'nav-how': 'How it works', 'nav-docs': 'Document check', 'badge': 'Pilot stage',
+      'h1': 'Your scholarship, followed all the way to your bank account.',
+      'sub': 'A local helper checks your documents, helps you apply and chases the payment, in your own language.',
+      'pilot': 'Pilot stage: starting in one district. This is not a government service.',
+      'cta1': 'See how it works', 'cta2': 'Check your documents',
+      'trk-title': 'Journey of an application',
+      'trk-1': '1. Find the scheme', 'trk-2': '2. Collect documents', 'trk-3': '3. Apply on the portal', 'trk-4': '4. Institute verifies', 'trk-5': '5. Payment credited',
+      'trk-help': 'We help here', 'trk-help2': 'We help here', 'trk-help3': 'We help here', 'trk-help4': 'We help here',
+      'trk-other': 'Portals and blogs already cover this',
+      'how-eyebrow': 'How it works', 'how-title': 'One helper, four steps, until the money arrives.',
+      's1t': 'Check', 's1d': 'We confirm which schemes you can apply for and list the documents each one needs.',
+      's2t': 'Prepare', 's2d': 'We check income proof, the Aadhaar and bank link, and that names match across documents.',
+      's3t': 'Apply', 's3d': 'We sit with you while you fill the form on the official portal, in your own language.',
+      's4t': 'Follow up', 's4d': 'We track the status and send WhatsApp updates until the payment is credited.',
+      'docs-eyebrow': 'Document check', 'docs-title': 'Are your documents ready?',
+      'docs-intro': 'Tick what you already have. Most delays reported by students begin with one of these.',
+      'docs-note': 'Requirements differ by scheme. Always check the official portal for your scheme.',
+      'd1': 'Aadhaar number linked to my bank account',
+      'd2': 'Bank passbook or statement (active account, same name everywhere)',
+      'd3': 'Recent income certificate',
+      'd4': 'Caste or category certificate, if the scheme needs one',
+      'd5': 'Last marksheet or proof of admission',
+      'd6': 'Passport-size photograph',
+      'd7': 'Mobile number linked to Aadhaar',
+      'prom-eyebrow': 'Our promises', 'prom-title': 'Rules we work by.',
+      'p1': 'We never ask for your passwords or OTPs.',
+      'p2': 'We use your documents only with your written consent.',
+      'p3': 'We never promise approval. The government or institute decides.',
+      'p4': 'You pay only if your scholarship is credited. Pilot terms are confirmed before you start.',
+      'p5': 'We are an independent service, not linked to any government portal.',
+      'price-eyebrow': 'Fees', 'price-title': 'Who pays for what.',
+      'fam-title': 'For families',
+      'fam-body': 'Checking eligibility and documents is free. A small success fee applies only when the scholarship is credited. The amount is agreed with your school or NGO partner before you start.',
+      'par-title': 'For schools, colleges and NGOs',
+      'par-body': 'We help your students finish their applications, and plan to give you a simple status list for each student. A per-student support fee will be set during the pilot.',
+      'faq-eyebrow': 'Questions', 'faq-title': 'Before you start.',
+      'q1': 'Is this a government service?', 'a1': 'No. We are an independent pilot. Applications are always submitted on the official portals.',
+      'q2': 'Do you guarantee a scholarship?', 'a2': 'No. Approval is decided by the government or the institute. We help reduce mistakes and follow up.',
+      'q3': 'What if my payment is stuck?', 'a3': 'We check the status and the common causes, such as Aadhaar-bank linking or a name mismatch, then take it up with the institute or the portal.',
+      'q4': 'Do you keep my documents?', 'a4': 'Only with your consent, and they are deleted after your case is closed.',
+      'contact-eyebrow': 'Contact', 'contact-title': 'Start a conversation.',
+      'contact-body': 'Our WhatsApp number will appear here when the pilot opens. Until then, check the official portals for your scheme.',
+      'portals': 'Official portals:',
+      'footer': 'Scholarship Navigator is an independent pilot project and is not affiliated with any government portal. This is a concept website for a course project, 2026.'
+    },
+    hi: {
+      'nav-how': 'कैसे काम करता है', 'nav-docs': 'दस्तावेज़ जाँच', 'badge': 'पायलट चरण',
+      'h1': 'आपकी स्कॉलरशिप, आपके बैंक खाते तक पहुँचने तक साथ।',
+      'sub': 'एक स्थानीय सहायक आपके दस्तावेज़ जाँचता है, आवेदन में मदद करता है और भुगतान की पूरी पैरवी करता है, आपकी अपनी भाषा में।',
+      'pilot': 'पायलट चरण: अभी एक ज़िले से शुरुआत। यह सरकारी सेवा नहीं है।',
+      'cta1': 'यह कैसे काम करता है', 'cta2': 'दस्तावेज़ जाँचें',
+      'trk-title': 'आवेदन का सफ़र',
+      'trk-1': '1. योजना खोजना', 'trk-2': '2. दस्तावेज़ जुटाना', 'trk-3': '3. पोर्टल पर आवेदन', 'trk-4': '4. संस्थान द्वारा सत्यापन', 'trk-5': '5. भुगतान जमा होना',
+      'trk-help': 'हम यहाँ मदद करते हैं', 'trk-help2': 'हम यहाँ मदद करते हैं', 'trk-help3': 'हम यहाँ मदद करते हैं', 'trk-help4': 'हम यहाँ मदद करते हैं',
+      'trk-other': 'पोर्टल और ब्लॉग पहले से बताते हैं',
+      'how-eyebrow': 'कैसे काम करता है', 'how-title': 'एक सहायक, चार चरण, पैसे आने तक।',
+      's1t': 'जाँच', 's1d': 'हम तय करते हैं कि आप किन योजनाओं के लिए आवेदन कर सकते हैं और हर योजना के लिए ज़रूरी दस्तावेज़ों की सूची देते हैं।',
+      's2t': 'तैयारी', 's2d': 'हम आय प्रमाण, आधार-बैंक लिंक और सभी दस्तावेज़ों में नामों का मिलान जाँचते हैं।',
+      's3t': 'आवेदन', 's3d': 'आधिकारिक पोर्टल पर फ़ॉर्म भरते समय हम आपके साथ बैठते हैं, आपकी भाषा में।',
+      's4t': 'पीछा', 's4d': 'भुगतान जमा होने तक हम स्थिति देखते हैं और WhatsApp पर अपडेट भेजते हैं।',
+      'docs-eyebrow': 'दस्तावेज़ जाँच', 'docs-title': 'क्या आपके दस्तावेज़ तैयार हैं?',
+      'docs-intro': 'जो आपके पास है उस पर टिक करें। छात्रों की ज़्यादातर देरी इन्हीं में से किसी एक से शुरू होती है।',
+      'docs-note': 'ज़रूरतें योजना के अनुसार अलग होती हैं। अपनी योजना के लिए आधिकारिक पोर्टल ज़रूर देखें।',
+      'd1': 'आधार नंबर मेरे बैंक खाते से जुड़ा है',
+      'd2': 'बैंक पासबुक या स्टेटमेंट (खाता चालू, हर जगह एक जैसा नाम)',
+      'd3': 'हाल का आय प्रमाण पत्र',
+      'd4': 'जाति या श्रेणी प्रमाण पत्र, अगर योजना में ज़रूरी हो',
+      'd5': 'पिछली मार्कशीट या दाख़िले का प्रमाण',
+      'd6': 'पासपोर्ट साइज़ फ़ोटो',
+      'd7': 'आधार से जुड़ा मोबाइल नंबर',
+      'prom-eyebrow': 'हमारे वादे', 'prom-title': 'हम इन नियमों पर चलते हैं।',
+      'p1': 'हम कभी आपका पासवर्ड या OTP नहीं माँगते।',
+      'p2': 'हम आपके दस्तावेज़ सिर्फ़ आपकी लिखित सहमति से इस्तेमाल करते हैं।',
+      'p3': 'हम मंज़ूरी का वादा नहीं करते। फ़ैसला सरकार या संस्थान करता है।',
+      'p4': 'शुल्क तभी लगेगा जब आपकी स्कॉलरशिप जमा हो जाए। पायलट की शर्तें शुरू करने से पहले बताई जाएँगी।',
+      'p5': 'हम एक स्वतंत्र सेवा हैं, किसी सरकारी पोर्टल से जुड़े नहीं।',
+      'price-eyebrow': 'शुल्क', 'price-title': 'कौन किसके लिए भुगतान करता है।',
+      'fam-title': 'परिवारों के लिए',
+      'fam-body': 'पात्रता और दस्तावेज़ों की जाँच मुफ़्त है। स्कॉलरशिप जमा होने पर ही एक छोटा सफलता शुल्क लगेगा। राशि शुरू करने से पहले आपके स्कूल या NGO साथी के साथ तय होगी।',
+      'par-title': 'स्कूल, कॉलेज और NGO के लिए',
+      'par-body': 'हम आपके छात्रों के आवेदन पूरे करवाने में मदद करते हैं और हर छात्र की स्थिति की सरल सूची देने की योजना है। प्रति छात्र सहयोग शुल्क पायलट के दौरान तय होगा।',
+      'faq-eyebrow': 'सवाल', 'faq-title': 'शुरू करने से पहले।',
+      'q1': 'क्या यह सरकारी सेवा है?', 'a1': 'नहीं। हम एक स्वतंत्र पायलट हैं। आवेदन हमेशा आधिकारिक पोर्टल पर ही जमा होते हैं।',
+      'q2': 'क्या आप स्कॉलरशिप की गारंटी देते हैं?', 'a2': 'नहीं। मंज़ूरी सरकार या संस्थान तय करता है। हम गलतियाँ कम करने और पीछा करने में मदद करते हैं।',
+      'q3': 'अगर भुगतान अटक जाए तो?', 'a3': 'हम स्थिति और आम कारण जाँचते हैं, जैसे आधार-बैंक लिंक या नाम का अंतर, फिर संस्थान या पोर्टल के साथ मामला आगे बढ़ाते हैं।',
+      'q4': 'क्या आप मेरे दस्तावेज़ अपने पास रखते हैं?', 'a4': 'केवल आपकी सहमति से, और मामला बंद होने के बाद उन्हें हटा दिया जाता है।',
+      'contact-eyebrow': 'संपर्क', 'contact-title': 'बातचीत शुरू करें।',
+      'contact-body': 'पायलट खुलने पर यहाँ हमारा WhatsApp नंबर दिखेगा। तब तक अपनी योजना के लिए आधिकारिक पोर्टल देखें।',
+      'portals': 'आधिकारिक पोर्टल:',
+      'footer': 'Scholarship Navigator एक स्वतंत्र पायलट प्रोजेक्ट है और किसी सरकारी पोर्टल से संबद्ध नहीं है। यह एक कोर्स प्रोजेक्ट की कॉन्सेप्ट वेबसाइट है, 2026।'
+    }
+  };
+  var lang = 'en';
+  var total = 7;
+
+  function progressText(n) {
+    return lang === 'hi' ? (total + ' में से ' + n + ' तैयार') : (n + ' of ' + total + ' ready');
+  }
+  function updateMeter() {
+    var boxes = document.querySelectorAll('#checks input');
+    var n = 0;
+    for (var i = 0; i < boxes.length; i++) { if (boxes[i].checked) n++; }
+    document.getElementById('fill').style.width = Math.round(n / total * 100) + '%';
+    document.getElementById('meter-text').textContent = progressText(n);
+  }
+  function apply(next) {
+    lang = next;
+    document.documentElement.lang = next === 'hi' ? 'hi' : 'en';
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      var key = els[i].getAttribute('data-i18n');
+      var val = T[next][key];
+      if (val !== undefined) els[i].textContent = val;
+    }
+    document.getElementById('lang-en').setAttribute('aria-pressed', next === 'en' ? 'true' : 'false');
+    document.getElementById('lang-hi').setAttribute('aria-pressed', next === 'hi' ? 'true' : 'false');
+    updateMeter();
+    try { localStorage.setItem('sn-lang', next); } catch (e) {}
+  }
+
+  document.getElementById('lang-en').addEventListener('click', function () { apply('en'); });
+  document.getElementById('lang-hi').addEventListener('click', function () { apply('hi'); });
+  document.getElementById('checks').addEventListener('change', updateMeter);
+
+  var saved = 'en';
+  try { saved = localStorage.getItem('sn-lang') || 'en'; } catch (e) {}
+  apply(saved === 'hi' ? 'hi' : 'en');
+})();
+</script>
+
+</body></html>
